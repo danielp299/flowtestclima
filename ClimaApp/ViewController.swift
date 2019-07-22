@@ -14,17 +14,17 @@ class ViewController: UIViewController {
     @IBOutlet weak var CurrentWeather: UILabel!
     @IBOutlet weak var CurrentTemp: UILabel!
     @IBOutlet weak var CurrentHumidity: UILabel!
-    @IBOutlet weak var CurrentButtonDetail: UIButton!
     @IBOutlet weak var TabletOtherCity: UITableView!
     @IBOutlet weak var CurrentIcon: UIImageView!
     
     
 
-    let APPID = ""
+    let APPID = "a98e5a2087b1dbb5d0f1255d34f08be0"
     let BaseUrl = "https://api.openweathermap.org/data/2.5/weather"
     let IconBaseURL = "https://openweathermap.org/img/wn/"
     let IconExtURL = "@2x.png"
     let KelvinToCelsius : Float32 = -273.15
+    let DetailAviable = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,57 +36,161 @@ class ViewController: UIViewController {
         //print(" Kelvin ti \(GetKelvinToCelsius(Kelvin: "285"))")
     }
     
-    /*func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions:
+    @IBAction func OnClickDetailWeather(){
         
-        (window?.rootViewController as? MyViewController)?.moc = persistentContainer.viewContext
-    }*/
+        
+        //DetailAviable
+        if true {
+            
+            /*
+             
+             var City:String = ""
+             var Weather:String = ""
+             var Temp:String = ""
+             var Pressure:String = ""
+             var Humidity:String = ""
+             var Wind:String = ""
+             var Visibility:String = ""
+             */
+            /*
+            let DetailController = ViewDetailController()
+            
+            if let city = defaults.string(forKey: "city") {
+                DetailController.City = "Cty ( \(city) )"
+            }else{
+                DetailController.City = "cty"
+            }
+            
+            if let weather = defaults.string(forKey: "weather") {
+                DetailController.Weather = weather
+            }else{
+                DetailController.Weather = ""
+            }
+            
+            if let temp = defaults.string(forKey: "temp") {
+                DetailController.Temp = temp
+            }else{
+                DetailController.Temp = ""
+            }
+            
+            if let pressure = defaults.string(forKey: "pressure") {
+                DetailController.Pressure = pressure
+            }else{
+                DetailController.Pressure = ""
+            }
+            
+            if let humidity = defaults.string(forKey: "humidity") {
+                DetailController.Humidity = humidity
+            }else{
+                DetailController.Humidity = ""
+            }
+            
+            if let wind = defaults.string(forKey: "wind") {
+                DetailController.Wind = wind
+            }else{
+                DetailController.Wind = ""
+            }
+            
+            if let visivility = defaults.string(forKey: "Visibility") {
+                DetailController.Visibility = visivility
+            }else{
+                DetailController.Visibility = ""
+            }
+            */
+          //  navigationController?.pushViewController(DetailController, animated: true)
+        }
+        
+        
+    }
     
-    func UpdateCurrentCityUi(JsonValue : Dictionary<String, AnyObject>){
-        
+    func UpdateWeaterData(IndexCity: String, JsonValue: Dictionary<String, AnyObject>){
         print(JsonValue)
         
+        let main = JsonValue["main"] as! Dictionary<String,AnyObject>
+        let array = (JsonValue["weather"]! as! NSArray).mutableCopy() as! NSMutableArray
+        let weather = array[0] as! Dictionary<String,AnyObject>
+        let wind = JsonValue["wind"] as! Dictionary<String,AnyObject>
+        
+        print(wind)
+        
+        let defaults = UserDefaults.standard
+        defaults.set(weather["main"] as? String, forKey: "\(IndexCity)city")
+        defaults.set(weather["description"] as? String, forKey: "\(IndexCity)weather")
+        defaults.set(weather["icon"] as? String, forKey: "\(IndexCity)icon")
+        
+        if let temp = main["temp"] {
+            defaults.set(self.GetKelvinToCelsius(Kelvin: String(describing: temp)) , forKey: "\(IndexCity)temp")
+        }else{
+            print("error temp")
+        }
+        if let humidity = main["humidity"] {
+            defaults.set(String(describing: humidity) , forKey: "\(IndexCity)humidity")
+        }else{
+            print("error humidity")
+        }
+        
+        if let pressure = main["pressure"] {
+            defaults.set(String(describing: pressure), forKey: "\(IndexCity)pressure")
+        }else{
+            print("error pressure")
+        }
+        
+        if let visibility = JsonValue["visibility"] {
+            defaults.set(String(describing: visibility), forKey: "\(IndexCity)visibility")
+        }else{
+            print("error visibility")
+        }
+        
+        if let windspeed = wind["speed"] {
+            defaults.set(String(describing: windspeed), forKey: "\(IndexCity)wind")
+        }else{
+            print("error windspeed")
+        }
+        /*
+        defaults.set(weather["visivility"] as? String, forKey: "\(IndexCity)visivility")
+        defaults.set(weather["pressure"] as? String, forKey: "\(IndexCity)pressure")
+        defaults.set(weather["wind"] as? String, forKey: "\(IndexCity)wind")
+        */
+ }
+    
+    func UpdateCityPreviewUi(IndexCity: String, JsonValue : Dictionary<String, AnyObject>, imageViewIcon : UIImageView, CityLabel :UILabel, WeatherLabel: UILabel, TempLabel:UILabel, HumidityLabel: UILabel ){
+        
+        let defaults = UserDefaults.standard
+        
         do {
-            //let coord = JsonValue["coord"] as! Dictionary<String,AnyObject>
-            //print("coord \(coord["lat"]) \(coord["lon"])")
-            print("weather \( JsonValue["weather"] )")
-            
-            let array = (JsonValue["weather"]! as! NSArray).mutableCopy() as! NSMutableArray
-            print("array 0 \(array[0])")
-            
-            let weather = array[0] as! Dictionary<String,AnyObject>
-            
-            let main = JsonValue["main"] as! Dictionary<String,AnyObject>
-            //print("main \(main)")
         
             DispatchQueue.main.async { // Correct K
-                self.CurrentCity.text = weather["main"] as? String
-                self.CurrentWeather.text = weather["description"] as? String
                 
-                if let temp = main["temp"] {
-                    //print("temp_min main \(temp_min)")
-                    self.CurrentTemp.text = self.GetKelvinToCelsius(Kelvin: String(describing: temp))
+                if let city = defaults.string(forKey: "\(IndexCity)city") {
+                    CityLabel.text = city
                 }else{
-                    print("error temp")
+                    CityLabel.text = ""
                 }
                 
-                if let humidity = main["humidity"] {
-                    //print("temp_max main \(temp_max)")
-                    self.CurrentHumidity.text = String(describing: humidity)
+                if let weather = defaults.string(forKey: "\(IndexCity)weather") {
+                    WeatherLabel.text = weather
                 }else{
-                    print("error humidity")
+                    WeatherLabel.text = ""
+                }
+                
+                if let temp = defaults.string(forKey: "\(IndexCity)temp") {
+                    TempLabel.text = temp
+                }else{
+                    TempLabel.text = ""
+                }
+                
+                if let humidity = defaults.string(forKey: "\(IndexCity)humidity") {
+                    HumidityLabel.text = humidity
+                }else{
+                    HumidityLabel.text = ""
                 }
             }
             
-            if let iconId = weather["icon"] {
-                let url = URL(string: "\(IconBaseURL)\(iconId)\(IconExtURL)")!
-                print(url)
-                self.DownloadImage(from: url)
-            }else{
-                print("error iconId")
+            
+            if let icon = defaults.string(forKey: "\(IndexCity)icon") {
+                let url = URL(string: "\(IconBaseURL)\(icon)\(IconExtURL)")!
+                self.DownloadImage(from: url,imageView: self.CurrentIcon)
             }
-            
-            
-            
             
         } catch let error as NSError {
             print("Failed to load: \(error.localizedDescription)")
@@ -97,20 +201,19 @@ class ViewController: UIViewController {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
     
-    func DownloadImage(from url: URL) {
-        print("Download Started")
+    func DownloadImage(from url: URL, imageView : UIImageView) {
+        //print("Download Started")
         getData(from: url) { data, response, error in
             guard let data = data, error == nil else { return }
             print(response?.suggestedFilename ?? url.lastPathComponent)
-            print("Download Finished")
             DispatchQueue.main.async() {
-                self.CurrentIcon.image = UIImage(data: data)
+                imageView.image = UIImage(data:data)!
             }
         }
     }
     
     func GetKelvinToCelsius(Kelvin : String)-> String{
-        let KelvinFloat : Float = Float32(Kelvin) as! Float
+        let KelvinFloat : Float = Float32(Kelvin) as! Float32
         return String(KelvinFloat + KelvinToCelsius)
     }
     
@@ -148,8 +251,14 @@ class ViewController: UIViewController {
                 
                 do {
                     let json = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
-                    
-                    self.UpdateCurrentCityUi(JsonValue: json)
+                    self.UpdateWeaterData(IndexCity: String("current"), JsonValue: json)
+                    self.UpdateCityPreviewUi(IndexCity: String("current"),
+                                             JsonValue: json,
+                                             imageViewIcon: self.CurrentIcon,
+                                             CityLabel: self.CurrentCity,
+                                             WeatherLabel: self.CurrentWeather,
+                                             TempLabel: self.CurrentTemp,
+                                             HumidityLabel: self.CurrentHumidity)
                 } catch {
                     print("error json parce")
                 }

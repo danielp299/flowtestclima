@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		655B69D422E600DB006FD41C /* ViewDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655B69D322E600DA006FD41C /* ViewDetailController.swift */; };
 		65911FB422E29DE800EAC703 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65911FB322E29DE800EAC703 /* AppDelegate.swift */; };
 		65911FB622E29DE800EAC703 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65911FB522E29DE800EAC703 /* ViewController.swift */; };
 		65911FB922E29DE800EAC703 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 65911FB722E29DE800EAC703 /* Main.storyboard */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		655B69D322E600DA006FD41C /* ViewDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDetailController.swift; sourceTree = "<group>"; };
 		65911FB022E29DE800EAC703 /* ClimaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClimaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		65911FB322E29DE800EAC703 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		65911FB522E29DE800EAC703 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				65911FB322E29DE800EAC703 /* AppDelegate.swift */,
 				65911FB522E29DE800EAC703 /* ViewController.swift */,
 				65911FB722E29DE800EAC703 /* Main.storyboard */,
+				655B69D322E600DA006FD41C /* ViewDetailController.swift */,
 				65911FBD22E29DEC00EAC703 /* Assets.xcassets */,
 				65911FBF22E29DEC00EAC703 /* LaunchScreen.storyboard */,
 				65911FC222E29DEC00EAC703 /* Info.plist */,
@@ -262,6 +265,7 @@
 				65911FB622E29DE800EAC703 /* ViewController.swift in Sources */,
 				65911FB422E29DE800EAC703 /* AppDelegate.swift in Sources */,
 				65911FBC22E29DE800EAC703 /* ClimaApp.xcdatamodeld in Sources */,
+				655B69D422E600DB006FD41C /* ViewDetailController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
